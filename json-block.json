@@ -22,6 +22,14 @@
           },
           "options": [
             {
+                "text": {
+                  "type": "plain_text",
+                  "emoji": true,
+                  "text": "ALL"
+                },
+                "value": "all"
+              },
+            {
               "text": {
                 "type": "plain_text",
                 "emoji": true,
