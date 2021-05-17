@@ -1,12 +1,13 @@
 'use strict'
 
+require("dotenv").config();
 const { WebClient } = require("@slack/web-api");
 
 const slackToken = process.env.SLACK_TOKEN;
 const slackClient = new WebClient(slackToken);
 
 const takeQuiz = require('./block-kit')
-const block = require('./json-block.json')
+const block = require('../json/radio.json')
 
 
 function callBot(event) {

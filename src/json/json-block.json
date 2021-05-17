@@ -15,6 +15,7 @@
         },
         "accessory": {
           "type": "static_select",
+          "action_id": "language_dropdown",
           "placeholder": {
             "type": "plain_text",
             "emoji": true,
@@ -64,6 +65,7 @@
         },
         "accessory": {
           "type": "static_select",
+          "action_id": "difficulty_dropdown",
           "placeholder": {
             "type": "plain_text",
             "emoji": true,
@@ -102,6 +104,23 @@
         "elements": [
           {
             "type": "button",
+            "action_id": "start_button",
+            "text": {
+              "type": "plain_text",
+              "emoji": true,
+              "text": "Let's Go!"
+            },
+            "style": "primary",
+            "value": "start"
+          }
+        ]
+      },
+      {
+        "type": "actions",
+        "elements": [
+          {
+            "type": "static_select",
+            "action_id": "start_button",
             "text": {
               "type": "plain_text",
               "emoji": true,
@@ -113,5 +132,3 @@
         ]
       }
 ]
-
-    

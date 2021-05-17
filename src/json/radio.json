@@ -1,0 +1,40 @@
+[
+  {
+    "type": "input",
+    "element": {
+      "type": "radio_buttons",
+      "options": [
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "HTML",
+            "emoji": true
+          },
+          "value": "HTML"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "CSS",
+            "emoji": true
+          },
+          "value": "CSS"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "JavaScript",
+            "emoji": true
+          },
+          "value": "JavaScript"
+        }
+      ],
+      "action_id": "radio_buttons-action"
+    },
+    "label": {
+      "type": "plain_text",
+      "text": "Select your focus",
+      "emoji": true
+    }
+  }
+]
