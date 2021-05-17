@@ -4,6 +4,9 @@ const { WebClient } = require("@slack/web-api");
 const { createEventAdapter } = require("@slack/events-api");
 const axios = require("axios");
 
+const takeQuiz = require('./block-kit')
+const block = require('./json-block.json')
+
 require("dotenv").config();
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
@@ -32,6 +35,7 @@ function callBot(event) {
           await slackClient.chat.postMessage({
             channel: event.channel,
             text: `Hello <@${event.user}> HERE IS YOUR FIRST QUESTION blahblahblah :tada:`,
+            blocks:block
           });
         } catch (error) {
           console.log(error.data);
