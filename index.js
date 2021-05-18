@@ -11,7 +11,7 @@ const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
 const PORT = process.env.SLACK_PORT || 3000;
 
-// const sortedQuestionsArray = [];
+const sortedQuestionsArray = [];
 
 // const slackEvents = createEventAdapter(slackSigningSecret);
 // const slackClient = new WebClient(slackToken);
@@ -30,7 +30,7 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
   // console.log("=======BODY=======", body);
   console.log("=======PAYLOAD=======", payload);
   // getProblems(payload);
-  let questionsArray = await getRandomProblem(payload, 5);
+  questionsArray = await getRandomProblem(payload, 5);
   console.log('hurray hurray here is the questionsArray', questionsArray);
   // startQuizz(body.trigger_id, 5)
   try {
@@ -80,7 +80,7 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
                 "emoji": true,
                 "text": "A"
               },
-              "value": "click_me_123"
+              "value": "answer_a"
             }
           },
           {
@@ -96,7 +96,7 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
                 "emoji": true,
                 "text": "B"
               },
-              "value": "click_me_123"
+              "value": "answer_b"
             }
           },
           {
@@ -112,7 +112,7 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
                 "emoji": true,
                 "text": "C"
               },
-              "value": "click_me_123"
+              "value": "answer_c"
             }
           },
           {
@@ -128,7 +128,7 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
                 "emoji": true,
                 "text": "D"
               },
-              "value": "click_me_123"
+              "value": "answer_d"
             }
           }
           // {
