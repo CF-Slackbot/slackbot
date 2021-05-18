@@ -33,139 +33,116 @@ app.action("static_select-action", async ({ ack, body, payload, say, client }) =
   let questionsArray = await getRandomProblem(payload, 5);
   console.log('hurray hurray here is the questionsArray', questionsArray);
   // startQuizz(body.trigger_id, 5)
+
   try {
     // Call views.open with the built-in client
-    const result = await client.views.open({
-      // Pass a valid trigger_id within 3 seconds of receiving it
-      trigger_id: body.trigger_id,
-      // View payload
-      view: {
-        type: 'modal',
-        // View identifier
-        callback_id: 'view_1',
-        title: {
-          type: 'plain_text',
-          text: 'Modal title'
-        },
-        blocks: [
-          {
-            "type": "divider"
+    for (let i = 0; i < questionsArray.length; i++) {
+      const result = await client.views.open({
+        // Pass a valid trigger_id within 3 seconds of receiving it
+        trigger_id: body.trigger_id,
+        // View payload
+        view: {
+          type: 'modal',
+          // View identifier
+          callback_id: 'view_1',
+          title: {
+            type: 'plain_text',
+            text: 'Quiz'
           },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              // "text": "How would you access the value of `x` in the following code? \n ```foo = { a: b, c: [ z, y, x ] }```"
-              "text": questionsArray[0].question,
+          blocks: [
+            {
+              "type": "divider"
             },
-            "accessory": {
-              "type": "image",
-              "image_url": "https://www.dictionary.com/e/wp-content/uploads/2018/03/Thinking_Face_Emoji-Emoji-Island-300x300.png",
-              "alt_text": "calendar thumbnail"
-            }
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_a,
-            },
-            "accessory": {
-              "type": "button",
+            {
+              "type": "section",
               "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "A"
+                "type": "mrkdwn",
+                // "text": "How would you access the value of `x` in the following code? \n ```foo = { a: b, c: [ z, y, x ] }```"
+                "text": questionsArray[i].question,
               },
-              "value": "click_me_123"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_b
+              "accessory": {
+                "type": "image",
+                "image_url": "https://www.dictionary.com/e/wp-content/uploads/2018/03/Thinking_Face_Emoji-Emoji-Island-300x300.png",
+                "alt_text": "calendar thumbnail"
+              }
             },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "B"
-              },
-              "value": "click_me_123"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_c
+            {
+              "type": "divider"
             },
-            "accessory": {
-              "type": "button",
+            {
+              "type": "section",
               "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "C"
+                "type": "mrkdwn",
+                "text": questionsArray[i].answers[i].answer_a,
               },
-              "value": "click_me_123"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": 'questionsArray[0].answers[0].answer_d'
+              "accessory": {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "emoji": true,
+                  "text": "A"
+                },
+                "value": "click_me_123"
+              }
             },
-            "accessory": {
-              "type": "button",
+            {
+              "type": "section",
               "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "D"
+                "type": "mrkdwn",
+                "text": questionsArray[i].answers[i].answer_b
               },
-              "value": "click_me_123"
-            }
+              "accessory": {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "emoji": true,
+                  "text": "B"
+                },
+                "value": "click_me_123"
+              }
+            },
+            questionsArray[i].answers[i].answer_c === !null ?
+              { 
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": questionsArray[i].answers[i].answer_c
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "emoji": true,
+                    "text": "C"
+                  },
+                  "value": "click_me_123"
+                }
+              } : {},
+            questionsArray[i].answers[i].answer_d === !null ?
+              { 
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": 'questionsArray[0].answers[0].answer_d'
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "emoji": true,
+                    "text": "D"
+                  },
+                  "value": "click_me_123"
+                }
+              } : {}
+          ],
+          submit: {
+            type: 'plain_text',
+            text: 'Submit'
           }
-          // {
-          //   type: 'section',
-          //   text: {
-          //     type: 'mrkdwn',
-          //     text: 'So here is your first question - better answer it correctly now'
-          //   },
-          //   accessory: {
-          //     type: 'button',
-          //     text: {
-          //       type: 'plain_text',
-          //       text: 'Click me!'
-          //     },
-          //     action_id: 'button_abc'
-          //   }
-          // },
-          // {
-          //   type: 'input',
-          //   block_id: 'input_c',
-          //   label: {
-          //     type: 'plain_text',
-          //     text: 'What are your hopes and dreams?'
-          //   },
-          //   element: {
-          //     type: 'plain_text_input',
-          //     action_id: 'dreamy_input',
-          //     multiline: true
-          //   }
-          // }
-        ],
-        submit: {
-          type: 'plain_text',
-          text: 'Submit'
         }
-      }
-    });
+      });
+    }
     console.log(result);
   }
   catch (error) {
