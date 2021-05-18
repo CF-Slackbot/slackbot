@@ -1,8 +1,17 @@
 [
   {
-    "type": "input",
-    "element": {
-      "type": "radio_buttons",
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "Select your focus"
+    },
+    "accessory": {
+      "type": "static_select",
+      "placeholder": {
+        "type": "plain_text",
+        "text": "Select an item",
+        "emoji": true
+      },
       "options": [
         {
           "text": {
@@ -27,14 +36,17 @@
             "emoji": true
           },
           "value": "JavaScript"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "All",
+            "emoji": true
+          },
+          "value": "All"
         }
       ],
-      "action_id": "radio_buttons-action"
-    },
-    "label": {
-      "type": "plain_text",
-      "text": "Select your focus",
-      "emoji": true
+      "action_id": "static_select-action"
     }
   }
 ]
