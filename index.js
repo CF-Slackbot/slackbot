@@ -22,7 +22,7 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
 });
 
-app.action("radio_buttons-action", async ({ ack, body, payload, say }) => {
+app.action("static_select-action", async ({ ack, body, payload, say }) => {
   await ack();
   await say(
     `Awesome! Let's start with 5 ${payload.selected_option.value} questions`
