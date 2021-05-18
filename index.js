@@ -1,8 +1,7 @@
 "use strict";
 
 require("dotenv").config();
-// const { WebClient } = require("@slack/web-api");
-// const { createEventAdapter } = require("@slack/events-api");
+
 const axios = require("axios");
 
 const callBot = require("./src/blockkit/callBot");
@@ -11,10 +10,7 @@ const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
 const PORT = process.env.SLACK_PORT || 3000;
 
-const sortedQuestionsArray = [];
-
-// const slackEvents = createEventAdapter(slackSigningSecret);
-// const slackClient = new WebClient(slackToken);
+let questionsArray = [];
 
 const { App, LogLevel } = require("@slack/bolt");
 
@@ -24,154 +20,123 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
 });
 
-app.action("static_select-action", async ({ ack, body, payload, say, client }) => {
-  await ack();
-  // await say(`Awesome! Let's start with 5 ${payload.selected_option.value} questions`);
-  // console.log("=======BODY=======", body);
-  console.log("=======PAYLOAD=======", payload);
-  // getProblems(payload);
-  questionsArray = await getRandomProblem(payload, 5);
-  console.log('hurray hurray here is the questionsArray', questionsArray);
-  // startQuizz(body.trigger_id, 5)
-  try {
-    // Call views.open with the built-in client
-    const result = await client.views.open({
-      // Pass a valid trigger_id within 3 seconds of receiving it
-      trigger_id: body.trigger_id,
-      // View payload
-      view: {
-        type: 'modal',
-        // View identifier
-        callback_id: 'view_1',
-        title: {
-          type: 'plain_text',
-          text: 'Modal title'
+app.action(
+  "static_select-action",
+  async ({ ack, body, payload, say, client }) => {
+    await ack();
+    // console.log("=======BODY=======", body);
+    // console.log("=======PAYLOAD=======", payload);
+    questionsArray = await getRandomProblem(payload, 5);
+
+    try {
+      // Call views.open with the built-in client
+
+      await client.views.open({
+        // Pass a valid trigger_id within 3 seconds of receiving it
+        trigger_id: body.trigger_id,
+        // View payload
+        view: {
+          type: "modal",
+          // View identifier
+          callback_id: "view_1",
+          title: {
+            type: "plain_text",
+            text: "Modal title",
+          },
+          blocks: [
+            {
+              type: "divider",
+            },
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: questionsArray[0].question,
+              },
+              accessory: {
+                type: "image",
+                image_url:
+                  "https://www.dictionary.com/e/wp-content/uploads/2018/03/Thinking_Face_Emoji-Emoji-Island-300x300.png",
+                alt_text: "calendar thumbnail",
+              },
+            },
+            {
+              type: "divider",
+            },
+            {
+              type: "input",
+              block_id: "input_block",
+              element: {
+                type: "radio_buttons",
+                options: [
+                  {
+                    text: {
+                      type: "plain_text",
+                      text: questionsArray[0].answers[0].answer_a,
+                      emoji: true,
+                    },
+                    value: "answer_a",
+                  },
+                  {
+                    text: {
+                      type: "plain_text",
+                      text: questionsArray[0].answers[0].answer_b,
+                      emoji: true,
+                    },
+                    value: "answer_b",
+                  },
+                  {
+                    text: {
+                      type: "plain_text",
+                      text: questionsArray[0].answers[0].answer_c,
+                      emoji: true,
+                    },
+                    value: "answer_c",
+                  },
+                ],
+                action_id: "radio_buttons-action",
+              },
+              label: {
+                type: "plain_text",
+                text: "Label",
+                emoji: true,
+              },
+            },
+          ],
+          submit: {
+            type: "plain_text",
+            text: "Submit",
+          },
         },
-        blocks: [
-          {
-            "type": "divider"
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              // "text": "How would you access the value of `x` in the following code? \n ```foo = { a: b, c: [ z, y, x ] }```"
-              "text": questionsArray[0].question,
-            },
-            "accessory": {
-              "type": "image",
-              "image_url": "https://www.dictionary.com/e/wp-content/uploads/2018/03/Thinking_Face_Emoji-Emoji-Island-300x300.png",
-              "alt_text": "calendar thumbnail"
-            }
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_a,
-            },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "A"
-              },
-              "value": "answer_a"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_b
-            },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "B"
-              },
-              "value": "answer_b"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": questionsArray[0].answers[0].answer_c
-            },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "C"
-              },
-              "value": "answer_c"
-            }
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": 'questionsArray[0].answers[0].answer_d'
-            },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "emoji": true,
-                "text": "D"
-              },
-              "value": "answer_d"
-            }
-          }
-          // {
-          //   type: 'section',
-          //   text: {
-          //     type: 'mrkdwn',
-          //     text: 'So here is your first question - better answer it correctly now'
-          //   },
-          //   accessory: {
-          //     type: 'button',
-          //     text: {
-          //       type: 'plain_text',
-          //       text: 'Click me!'
-          //     },
-          //     action_id: 'button_abc'
-          //   }
-          // },
-          // {
-          //   type: 'input',
-          //   block_id: 'input_c',
-          //   label: {
-          //     type: 'plain_text',
-          //     text: 'What are your hopes and dreams?'
-          //   },
-          //   element: {
-          //     type: 'plain_text_input',
-          //     action_id: 'dreamy_input',
-          //     multiline: true
-          //   }
-          // }
-        ],
-        submit: {
-          type: 'plain_text',
-          text: 'Submit'
-        }
-      }
-    });
-    console.log(result);
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
-  catch (error) {
-    console.error(error);
+);
+
+app.view("view_1", async ({ ack, body, view, client }) => {
+  await ack();
+  const user = body["user"]["id"];
+  const val =
+    view["state"]["values"]["input_block"]["radio_buttons-action"][
+      "selected_option"
+    ]["value"];
+  let ans = questionsArray.shift()["correct_answer"];
+
+  if (val === ans) {
+    await client.chat.postMessage({
+      channel: user,
+      text: "You got it right!",
+    });
+  } else {
+    await client.chat.postMessage({
+      channel: user,
+      text: "Better luck next time!",
+    });
   }
 });
+
 
 async function getProblems(payload) {
   try {
@@ -192,24 +157,16 @@ async function getRandomProblem(payload, num) {
       : `${process.env.QUESTION_URL}/search?category=${payload.selected_option.value}`;
   const questions = await axios.get(url);
   let qArr = questions.data;
-  // let x = qArr.sort(() => Math.random() - Math.random()).slice(0, num);
-  let sortedQuestionsArray = qArr.sort(() => Math.random() - Math.random()).slice(0, num);
-  // console.log("getting qs", sortedQuestionsArray);
-  return sortedQuestionsArray
+  let sortedQuestionsArray = qArr
+    .sort(() => Math.random() - Math.random())
+    .slice(0, num);
+  return sortedQuestionsArray;
 }
-// async function startQuiz(message) {
-// }
-// Format imported random problems into questions with multiple choice
 
 app.message(async ({ message, say }) => {
   await callBot(message);
 });
 
-app.action('static_select-action', async ({ message, say, ack }) => {
-  // ack();
-  console.log('yay we are in app event ============================>>>>>>>>>>>>>>>', message);
-  // await startQuiz(message);
-});
 
 (async () => {
   await app.start(PORT);
