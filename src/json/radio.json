@@ -1,0 +1,52 @@
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "Select your focus"
+    },
+    "accessory": {
+      "type": "static_select",
+      "placeholder": {
+        "type": "plain_text",
+        "text": "Select an item",
+        "emoji": true
+      },
+      "options": [
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "HTML",
+            "emoji": true
+          },
+          "value": "HTML"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "CSS",
+            "emoji": true
+          },
+          "value": "CSS"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "JavaScript",
+            "emoji": true
+          },
+          "value": "JavaScript"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "All",
+            "emoji": true
+          },
+          "value": "All"
+        }
+      ],
+      "action_id": "static_select-action"
+    }
+  }
+]
