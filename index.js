@@ -7,7 +7,7 @@ const { modalQs, getRandomProblem } = require("./src/blockkit/modalConfig");
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
-const PORT = process.env.SLACK_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 const { App, LogLevel } = require("@slack/bolt");
 
