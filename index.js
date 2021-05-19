@@ -2,17 +2,12 @@
 
 require("dotenv").config();
 
-const axios = require("axios");
-
 const callBot = require("./src/blockkit/callBot");
-const modalQs = require("./src/blockkit/modalConfig")
-
+const { modalQs, getRandomProblem } = require("./src/blockkit/modalConfig");
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
 const PORT = process.env.SLACK_PORT || 3000;
-
-let questionsArray = [];
 
 const { App, LogLevel } = require("@slack/bolt");
 
@@ -22,48 +17,54 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
 });
 
-app.action(
-  "static_select-action",
-  async ({ ack, body, payload, say, client }) => {
-    // await ack();
-    // console.log("=======BODY=======", body);
-    // console.log("=======PAYLOAD=======", payload);
-    // questionsArray = await getRandomProblem(payload, 5);
-    modalQs(ack,body,payload,client)
-  }
-);
+let questionsArray = [];
 
+app.action("static_select-action", async ({ ack, body, payload, client }) => {
+  questionsArray = await getRandomProblem(payload, 5);
+  modalQs(ack, body, payload, client, questionsArray);
+});
 
 app.view("view_1", async ({ ack, body, view, client }) => {
   await ack();
   const user = body["user"]["id"];
-  const val =
-    view["state"]["values"]["input_block"]["radio_buttons-action"][
-      "selected_option"
-    ]["value"];
-  let ans = questionsArray.shift()["correct_answer"];
-
-
+  let right = [];
+  let wrong = [];
+  let count = 0
+  for (let i = 0; i < questionsArray.length; i++) {
+    if (
+      view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
+        "selected_option"
+      ]["value"] === questionsArray[i]["correct_answer"]
+    ) {
+      right.push({question:questionsArray[i]['question']});
+      count += 1
+    } else {
+      wrong.push({question:questionsArray[i]['question']})
+    }
+    // vals.push(
+    //   view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
+    //     "selected_option"
+    //   ]["value"]
+    // );
+    // ans.push(questionsArray[i]["correct_answer"]);
+  }
+  let msg = `Questions you got right ${right}! \n Questions you got wrong ${wrong}. \n You got ${count} right out of 5`
+  try {
+    await client.chat.postMessage({
+      channel: user,
+      text: msg
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+  console.log("vals", vals);
+  console.log("ans", ans);
 });
-
-
-async function getRandomProblem(payload, num) {
-  const url =
-    payload.selected_option.value === "All"
-      ? `${process.env.QUESTION_URL}?category=${payload.selected_option.value}`
-      : `${process.env.QUESTION_URL}/search?category=${payload.selected_option.value}`;
-  const questions = await axios.get(url);
-  let qArr = questions.data;
-  let sortedQuestionsArray = qArr
-    .sort(() => Math.random() - Math.random())
-    .slice(0, num);
-  return sortedQuestionsArray;
-}
 
 app.message(async ({ message, say }) => {
   await callBot(message);
 });
-
 
 (async () => {
   await app.start(PORT);
