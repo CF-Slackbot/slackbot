@@ -30,23 +30,26 @@ app.view("view_1", async ({ ack, body, view, client }) => {
   let right = [];
   let wrong = [];
   let count = 0
+  let internalStatsArray = [];
+  let correct;
+  let userInput;
+  let internalAnswerObj;
   for (let i = 0; i < questionsArray.length; i++) {
-    if (
-      view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
-        "selected_option"
-      ]["value"] === questionsArray[i]["correct_answer"]
-    ) {
-      right.push({question:questionsArray[i]['question']});
+    correct = questionsArray[i]["correct_answer"];
+    userInput = view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`]["selected_option"]["value"];
+    internalAnswerObj = {question: questionsArray[i]['question'], userAnswer: questionsArray[i].answers[0][userInput], correctAnswer: questionsArray[i].answers[0][correct]}
+    if (userInput === correct) {
+      // right.push({question:questionsArray[i]['question']});
+      right.push(` \n ${questionsArray[i]['question']}`);
+      internalStatsArray.push(internalAnswerObj)
       count += 1
     } else {
-      wrong.push({question:questionsArray[i]['question']})
+      // wrong.push({question:questionsArray[i]['question']})
+      wrong.push(` \n ${questionsArray[i]['question']}`);
+      // internalStatsArray.push({question: questionsArray[i]['question'], userAnswer: userInput, correctAnswer: correct})
+      internalStatsArray.push(internalAnswerObj)
     }
-    // vals.push(
-    //   view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
-    //     "selected_option"
-    //   ]["value"]
-    // );
-    // ans.push(questionsArray[i]["correct_answer"]);
+
   }
   let msg = `Questions you got right ${right}! \n Questions you got wrong ${wrong}. \n You got ${count} right out of 5`
   try {
@@ -58,14 +61,15 @@ app.view("view_1", async ({ ack, body, view, client }) => {
   catch (error) {
     console.error(error);
   }
-  console.log("vals", vals);
-  console.log("ans", ans);
+  console.log("right", right);
+  console.log("wrong", wrong);
+  console.log("internalStatsArray", internalStatsArray);
 });
 
 app.message(async ({ message, say }) => {
   await callBot(message);
 });
-
+                                                           
 (async () => {
   await app.start(PORT);
   console.log("⚡️ Bolt app is running!");
