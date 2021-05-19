@@ -10,7 +10,6 @@ const block = require("../json/radio.json");
 
 function callBot(event) {
   console.log(`Got message from user ${event.user}: ${event.text}`);
-  console.log("we made it - fuck yes");
   if (event.text.toLowerCase().startsWith("y")) {
     yes(event);
   } else if (event.text.toLowerCase().startsWith("n")) {
@@ -52,7 +51,7 @@ async function initiate(event) {
     try {
       await slackClient.chat.postMessage({
         channel: event.channel,
-        text: `Hello <@${event.user}> would you like to take the quiz to improve your coding knowledge. It's a lot of fun. Reply with YES or Y :tada:`,
+        text: `Hello <@${event.user}> would you like to take the quiz to improve your coding knowledge. It's a lot of fun. If so reply with YES or Y :tada:`,
       });
     } catch (error) {
       console.log(error.data);

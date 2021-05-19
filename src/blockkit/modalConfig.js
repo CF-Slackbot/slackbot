@@ -1,25 +1,10 @@
 "use strict";
 
-const axios = require("axios");
-
-
-async function getRandomProblem(payload, num) {
-  const url =
-    payload.selected_option.value === "All"
-      ? `${process.env.QUESTION_URL}?category=${payload.selected_option.value}`
-      : `${process.env.QUESTION_URL}/search?category=${payload.selected_option.value}`;
-  const questions = await axios.get(url);
-  let qArr = questions.data;
-  let sortedQuestionsArray = qArr
-    .sort(() => Math.random() - Math.random())
-    .slice(0, num);
-  return sortedQuestionsArray;
-}
-
-async function modalQs(ack, body, payload, client,questionsArray) {
+async function modalQs(ack, body, payload, client, questionsArray) {
   await ack();
   let blocks = [];
   let divider = { type: "divider" };
+  let topic = payload.selected_option.value
   for (let i = 0; i < questionsArray.length; i++) {
     let section = {
       type: "section",
@@ -94,7 +79,6 @@ async function modalQs(ack, body, payload, client,questionsArray) {
   }
   try {
     // Call views.open with the built-in client
-    console.log("This is blocks", blocks);
     await client.views.open({
       // Pass a valid trigger_id within 3 seconds of receiving it
       trigger_id: body.trigger_id,
@@ -105,7 +89,7 @@ async function modalQs(ack, body, payload, client,questionsArray) {
         callback_id: "view_1",
         title: {
           type: "plain_text",
-          text: "Quiz",
+          text: `Quiz on ${topic}`,
         },
         blocks: blocks,
         submit: {
@@ -113,11 +97,11 @@ async function modalQs(ack, body, payload, client,questionsArray) {
           text: "Submit",
         },
       },
-    })
+    });
     return questionsArray;
   } catch (error) {
     console.error(error);
   }
 }
 
-module.exports = {modalQs,getRandomProblem};
+module.exports = modalQs;

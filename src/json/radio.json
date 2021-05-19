@@ -1,9 +1,17 @@
-[
+[  
+  {
+  "type": "header",
+  "text": {
+    "type": "plain_text",
+    "text": "Awesome! Let's get started",
+    "emoji": true
+    }
+  },
   {
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": "Select your focus"
+      "text": ":brain: Select your focus :brain:"
     },
     "accessory": {
       "type": "static_select",
