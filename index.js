@@ -49,12 +49,7 @@ app.view("view_1", async ({ ack, body, view, client }) => {
       // internalStatsArray.push({question: questionsArray[i]['question'], userAnswer: userInput, correctAnswer: correct})
       internalStatsArray.push(internalAnswerObj)
     }
-    // vals.push(
-    //   view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
-    //     "selected_option"
-    //   ]["value"]
-    // );
-    // ans.push(questionsArray[i]["correct_answer"]);
+
   }
   let msg = `Questions you got right ${right}! \n Questions you got wrong ${wrong}. \n You got ${count} right out of 5`
   try {
