@@ -2,7 +2,7 @@
 
 const axios = require("axios");
 
-let questionsArray = [];
+let questionsArray = []
 
 async function getRandomProblem(payload, num) {
   const url =
@@ -17,9 +17,9 @@ async function getRandomProblem(payload, num) {
   return sortedQuestionsArray;
 }
 
-async function modalQs(ack, body, payload, client) {
+async function modalQs(ack, body, payload, client,questionsArray) {
   await ack();
-  questionsArray = await getRandomProblem(payload, 5);
+//   questionsArray = await getRandomProblem(payload, 5);
   let blocks = [];
   let divider = { type: "divider" };
   for (let i = 0; i < questionsArray.length; i++) {
@@ -60,6 +60,7 @@ async function modalQs(ack, body, payload, client) {
             value: "answer_b",
           },
         ],
+        action_id: `radio_buttons-action${i}`,
       },
       label: {
         type: "plain_text",
@@ -114,10 +115,11 @@ async function modalQs(ack, body, payload, client) {
           text: "Submit",
         },
       },
-    });
+    })
+    return questionsArray;
   } catch (error) {
     console.error(error);
   }
 }
 
-module.exports = modalQs;
+module.exports = {modalQs,getRandomProblem};
