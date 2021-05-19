@@ -28,17 +28,15 @@ async function modalQs(ack, body, payload, client, questionsArray) {
         options: [
           {
             text: {
-              type: "plain_text",
+              type: "mrkdwn",
               text: questionsArray[i].answers[0].answer_a,
-              emoji: true,
             },
             value: "answer_a",
           },
           {
             text: {
-              type: "plain_text",
+              type: "mrkdwn",
               text: questionsArray[i].answers[0].answer_b,
-              emoji: true,
             },
             value: "answer_b",
           },
@@ -53,17 +51,15 @@ async function modalQs(ack, body, payload, client, questionsArray) {
     };
     let answer3 = {
       text: {
-        type: "plain_text",
+        type: "mrkdwn",
         text: questionsArray[i].answers[0].answer_c,
-        emoji: true,
       },
       value: "answer_c",
     };
     let answer4 = {
       text: {
-        type: "plain_text",
+        type: "mrkdwn",
         text: questionsArray[i].answers[0].answer_d,
-        emoji: true,
       },
       value: "answer_d",
     };
