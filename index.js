@@ -6,7 +6,7 @@ const callBot = require("./src/blockkit/callBot");
 const { modalQs, getRandomProblem } = require("./src/blockkit/modalConfig");
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
-const slackToken = process.env.SLACK_TOKEN;
+const slackToken = process.env.SLACK_BOT_TOKEN;
 const PORT = process.env.PORT || 3000;
 
 const { App, LogLevel } = require("@slack/bolt");
