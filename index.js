@@ -2,14 +2,16 @@
 
 require("dotenv").config();
 
+const { App, LogLevel } = require("@slack/bolt");
+
 const callBot = require("./src/blockkit/callBot");
-const { modalQs, getRandomProblem } = require("./src/blockkit/modalConfig");
+const modalQs = require("./src/blockkit/modalConfig");
+const getRandomProblem = require("./src/blockkit/getRandomProblem");
+const results = require("./src/blockkit/getResult");
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
-const PORT = process.env.SLACK_PORT || 3000;
-
-const { App, LogLevel } = require("@slack/bolt");
+const PORT = process.env.PORT || 3000;
 
 const app = new App({
   token: slackToken,
@@ -25,48 +27,13 @@ app.action("static_select-action", async ({ ack, body, payload, client }) => {
 });
 
 app.view("view_1", async ({ ack, body, view, client }) => {
-  await ack();
-  const user = body["user"]["id"];
-  let right = [];
-  let wrong = [];
-  let count = 0
-  let internalStatsArray = [];
-  let correct, userInput, internalAnswerObj;
-  for (let i = 0; i < questionsArray.length; i++) {
-    correct = questionsArray[i]["correct_answer"];
-    userInput = view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`]["selected_option"]["value"];
-    internalAnswerObj = {question: questionsArray[i]['question'], userAnswer: questionsArray[i].answers[0][userInput], correctAnswer: questionsArray[i].answers[0][correct]}
-    if (userInput === correct) {
-      // right.push({question:questionsArray[i]['question']});
-      right.push(` \n ${questionsArray[i]['question']} 	:beer: `);
-      internalStatsArray.push(internalAnswerObj)
-      count += 1
-    } else {
-      // wrong.push({question:questionsArray[i]['question']})
-      wrong.push(` \n ${questionsArray[i]['question']}  :pig: `);
-      // internalStatsArray.push({question: questionsArray[i]['question'], userAnswer: userInput, correctAnswer: correct})
-      internalStatsArray.push(internalAnswerObj)
-    }
-  }
-  let msg = `Questions you got right ${right}! \n \n Questions you got wrong ${wrong}. \n \n You got ${count} right out of 5`
-  try {
-    await client.chat.postMessage({
-      channel: user,
-      text: msg
-    });
-  }
-  catch (error) {
-    console.error(error);
-  }
-  console.log("right", right);
-  console.log("wrong", wrong);
-  console.log("internalStatsArray", internalStatsArray);
+  results(ack, body, view, questionsArray, client);
 });
 
-app.message(async ({ message, say }) => {
+app.message(async ({ message}) => {
   await callBot(message);
 });
-                                                           
+
 (async () => {
   await app.start(PORT);
   console.log("⚡️ Bolt app is running!");
