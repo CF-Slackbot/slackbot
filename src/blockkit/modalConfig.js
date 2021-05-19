@@ -2,7 +2,6 @@
 
 const axios = require("axios");
 
-let questionsArray = []
 
 async function getRandomProblem(payload, num) {
   const url =
@@ -19,7 +18,6 @@ async function getRandomProblem(payload, num) {
 
 async function modalQs(ack, body, payload, client,questionsArray) {
   await ack();
-//   questionsArray = await getRandomProblem(payload, 5);
   let blocks = [];
   let divider = { type: "divider" };
   for (let i = 0; i < questionsArray.length; i++) {
