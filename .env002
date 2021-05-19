@@ -1,0 +1,4 @@
+SLACK_PORT=3000
+SLACK_SIGNING_SECRET=f9df6aa70110fbe671f7a1106a42355b
+SLACK_TOKEN=xoxb-2051991201991-2052620508823-CheANckz7vEHwzLvq7eMuLJ5
+QUESTION_URL=https://cf-slackbot-questions-api.herokuapp.com/questions
