@@ -1,21 +1,22 @@
 "use strict";
 
-async function getResult(ack, body, view, questionsArray, client) {
+async function getResult(ack, body, view, questionsObject, client) {
   await ack();
+
   const user = body["user"]["id"];
   let wrong2 = [];
   let count = 0;
   let correct, userInput, internalAnswerObj;
-  for (let i = 0; i < questionsArray.length; i++) {
-    correct = questionsArray[i]["correct_answer"];
+  for (let i = 0; i < questionsObject.questionsArray.length; i++) {
+    correct = questionsObject.questionsArray[i]["correct_answer"];
     userInput =
       view["state"]["values"][`input_block${i}`][`radio_buttons-action${i}`][
         "selected_option"
       ]["value"];
     internalAnswerObj = {
-      question: questionsArray[i]["question"],
-      userAnswer: questionsArray[i].answers[0][userInput],
-      correctAnswer: questionsArray[i].answers[0][correct],
+      question: questionsObject.questionsArray[i]["question"],
+      userAnswer: questionsObject.questionsArray[i].answers[0][userInput],
+      correctAnswer: questionsObject.questionsArray[i].answers[0][correct],
     };
     userInput === correct ? (count += 1) : wrong2.push(internalAnswerObj);
   }
@@ -83,11 +84,13 @@ async function getResult(ack, body, view, questionsArray, client) {
   resultBlock.push(again);
 
   try {
-    await client.chat.postMessage({
-      channel: user,
-      text: "",
-      blocks: resultBlock,
-    });
+    if(questionsObject.user === user){
+      await client.chat.postMessage({
+        channel: user,
+        text: "",
+        blocks: resultBlock,
+      });
+    }
   } catch (error) {
     console.error(error);
   }

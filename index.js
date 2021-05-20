@@ -17,17 +17,29 @@ const app = new App({
   token: slackToken,
   signingSecret: slackSigningSecret,
   logLevel: LogLevel.DEBUG,
+  socketMode: true,
+  appToken: process.env.SOCKET_TOKEN
 });
 
 let questionsArray = [];
+let questionsObject = {};
 
 app.action("static_select-action", async ({ ack, body, payload, client }) => {
+  // console.log("======== body ========", body)
+  // console.log("======== payload ========", payload)
+  // console.log("======== client ========", client)
+  // console.log("======== ack ========", ack)
   questionsArray = await getRandomProblem(payload, 5);
-  modalQs(ack, body, payload, client, questionsArray);
+  questionsObject = {
+    user: body["user"]["id"],
+    questionsArray: questionsArray
+  }
+  // console.log("===============DID WE BUILD IT?============",questionsObject)
+  modalQs(ack, body, payload, client, questionsObject);
 });
 
 app.view("view_1", async ({ ack, body, view, client }) => {
-  results(ack, body, view, questionsArray, client);
+  results(ack, body, view, questionsObject, client);
 });
 
 app.message(async ({ message}) => {
