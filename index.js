@@ -18,23 +18,23 @@ const app = new App({
   signingSecret: slackSigningSecret,
   logLevel: LogLevel.DEBUG,
   socketMode: true,
-  appToken: process.env.test
+  appToken: process.env.SOCKET_TOKEN
 });
 
 let questionsArray = [];
 let questionsObject = {};
 
 app.action("static_select-action", async ({ ack, body, payload, client }) => {
-  console.log("======== body ========", body)
-  console.log("======== payload ========", payload)
-  console.log("======== client ========", client)
-  console.log("======== ack ========", ack)
+  // console.log("======== body ========", body)
+  // console.log("======== payload ========", payload)
+  // console.log("======== client ========", client)
+  // console.log("======== ack ========", ack)
   questionsArray = await getRandomProblem(payload, 5);
   questionsObject = {
     user: body["user"]["id"],
     questionsArray: questionsArray
   }
-  console.log("===============DID WE BUILD IT?============",questionsObject)
+  // console.log("===============DID WE BUILD IT?============",questionsObject)
   modalQs(ack, body, payload, client, questionsObject);
 });
 
