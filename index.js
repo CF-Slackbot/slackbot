@@ -17,8 +17,8 @@ const app = new App({
   token: slackToken,
   signingSecret: slackSigningSecret,
   logLevel: LogLevel.DEBUG,
-  socketMode: true,
-  appToken: process.env.SOCKET_TOKEN
+  // socketMode: true,
+  // appToken: process.env.SOCKET_TOKEN
 });
 
 let questionsArray = [];
