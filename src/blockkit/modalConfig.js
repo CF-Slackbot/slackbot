@@ -1,16 +1,16 @@
 "use strict";
 
-async function modalQs(ack, body, payload, client, questionsArray) {
+async function modalQs(ack, body, payload, client, questionsObject) {
   await ack();
   let blocks = [];
   let divider = { type: "divider" };
   let topic = payload.selected_option.value
-  for (let i = 0; i < questionsArray.length; i++) {
+  for (let i = 0; i < questionsObject.questionsArray.length; i++) {
     let section = {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: questionsArray[i].question,
+        text: questionsObject.questionsArray[i].question,
       },
       accessory: {
         type: "image",
@@ -29,14 +29,14 @@ async function modalQs(ack, body, payload, client, questionsArray) {
           {
             text: {
               type: "mrkdwn",
-              text: questionsArray[i].answers[0].answer_a,
+              text: questionsObject.questionsArray[i].answers[0].answer_a,
             },
             value: "answer_a",
           },
           {
             text: {
               type: "mrkdwn",
-              text: questionsArray[i].answers[0].answer_b,
+              text: questionsObject.questionsArray[i].answers[0].answer_b,
             },
             value: "answer_b",
           },
@@ -52,21 +52,21 @@ async function modalQs(ack, body, payload, client, questionsArray) {
     let answer3 = {
       text: {
         type: "mrkdwn",
-        text: questionsArray[i].answers[0].answer_c,
+        text: questionsObject.questionsArray[i].answers[0].answer_c,
       },
       value: "answer_c",
     };
     let answer4 = {
       text: {
         type: "mrkdwn",
-        text: questionsArray[i].answers[0].answer_d,
+        text: questionsObject.questionsArray[i].answers[0].answer_d,
       },
       value: "answer_d",
     };
-    if (questionsArray[i].answers[0].answer_c !== null) {
+    if (questionsObject.questionsArray[i].answers[0].answer_c !== null) {
       question.element.options.push(answer3);
     }
-    if (questionsArray[i].answers[0].answer_d !== null) {
+    if (questionsObject.questionsArray[i].answers[0].answer_d !== null) {
       question.element.options.push(answer4);
     }
     blocks.push(divider);
@@ -94,7 +94,7 @@ async function modalQs(ack, body, payload, client, questionsArray) {
         },
       },
     });
-    return questionsArray;
+    return questionsObject;
   } catch (error) {
     console.error(error);
   }
