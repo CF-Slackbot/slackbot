@@ -8,7 +8,7 @@
 
 ### Links to Documentation
 
-- [See our GitBook](app.gitbook.com/@slackbot-codefellows/s/cf-slack-bot/)
+- [See our GitBook](https://app.gitbook.com/@slackbot-codefellows/s/cf-slack-bot/)
 - [Project Prep](https://github.com/CF-Slackbot/project-prep)
 - [Presentation Slide Deck](https://drive.google.com/file/d/1HCzKwnZTv8auJAXEO6DBtlLeKoNz_ZLo/view?usp=sharing)
   
