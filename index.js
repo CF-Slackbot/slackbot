@@ -11,7 +11,7 @@ const results = require("./src/blockkit/getResult");
 
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
 const slackToken = process.env.SLACK_TOKEN;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 
 const app = new App({
   token: slackToken,
