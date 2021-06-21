@@ -80,10 +80,6 @@ async function getResult(ack, body, view, questionsObject, client) {
   };
 
   let resultBlock = [header, div, result, div, pracTopic];
-  console.log("GETTING DATA", "QUESTION ARRAY", questionsObject.questionsArray);
-  console.log("GETTING DATA", "BODY", body);
-  console.log("GETTING DATA", "BODY USER", body["user"]);
-  console.log("GETTING DATA", "COUNT", count);
 
   for (let i = 0; i < wrong2.length; i++) {
     let incorrect = {
