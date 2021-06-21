@@ -4,7 +4,7 @@ async function modalQs(ack, body, payload, client, questionsObject) {
   await ack();
   let blocks = [];
   let divider = { type: "divider" };
-  let topic = payload.selected_option.value
+  let topic = payload.selected_option.value;
   for (let i = 0; i < questionsObject.questionsArray.length; i++) {
     let section = {
       type: "section",
@@ -19,7 +19,6 @@ async function modalQs(ack, body, payload, client, questionsObject) {
         alt_text: "calendar thumbnail",
       },
     };
-
     let question = {
       type: "input",
       block_id: `input_block${i}`,
@@ -29,15 +28,18 @@ async function modalQs(ack, body, payload, client, questionsObject) {
           {
             text: {
               type: "mrkdwn",
-              text: questionsObject.questionsArray[i].answers[0].answer_a,
+              text: questionsObject.questionsArray[i].answers.answer_a,
+              //
             },
             value: "answer_a",
           },
           {
             text: {
               type: "mrkdwn",
-              text: questionsObject.questionsArray[i].answers[0].answer_b,
+              text: questionsObject.questionsArray[i].answers.answer_b,
+
             },
+            
             value: "answer_b",
           },
         ],
@@ -52,21 +54,25 @@ async function modalQs(ack, body, payload, client, questionsObject) {
     let answer3 = {
       text: {
         type: "mrkdwn",
-        text: questionsObject.questionsArray[i].answers[0].answer_c,
+        text: questionsObject.questionsArray[i].answers.answer_c,
+
       },
       value: "answer_c",
     };
     let answer4 = {
       text: {
         type: "mrkdwn",
-        text: questionsObject.questionsArray[i].answers[0].answer_d,
+        text: questionsObject.questionsArray[i].answers.answer_d,
+
       },
       value: "answer_d",
     };
-    if (questionsObject.questionsArray[i].answers[0].answer_c !== null) {
+      if (questionsObject.questionsArray[i].answers.answer_c !== null) {
+
       question.element.options.push(answer3);
     }
-    if (questionsObject.questionsArray[i].answers[0].answer_d !== null) {
+      if (questionsObject.questionsArray[i].answers.answer_d !== null) {
+
       question.element.options.push(answer4);
     }
     blocks.push(divider);
