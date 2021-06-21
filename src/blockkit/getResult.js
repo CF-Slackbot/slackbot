@@ -1,5 +1,23 @@
 "use strict";
 
+const axios = require("axios");
+
+const api = "https://cf-slackbot-questions-api.herokuapp.com/results";
+
+let addResult = async (questions, incorrect, user) => {
+  try {
+    await axios.post(api, {
+      user: user["name"],
+      userID: user["id"],
+      questions: questions,
+      incorrectQ: incorrect,
+      timestamp: new Date(),
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 async function getResult(ack, body, view, questionsObject, client) {
   await ack();
 
@@ -15,8 +33,8 @@ async function getResult(ack, body, view, questionsObject, client) {
       ]["value"];
     internalAnswerObj = {
       question: questionsObject.questionsArray[i]["question"],
-      userAnswer: questionsObject.questionsArray[i].answers[0][userInput],
-      correctAnswer: questionsObject.questionsArray[i].answers[0][correct],
+      userAnswer: questionsObject.questionsArray[i].answers[userInput],
+      correctAnswer: questionsObject.questionsArray[i].answers[correct],
     };
     userInput === correct ? (count += 1) : wrong2.push(internalAnswerObj);
   }
@@ -62,6 +80,10 @@ async function getResult(ack, body, view, questionsObject, client) {
   };
 
   let resultBlock = [header, div, result, div, pracTopic];
+  console.log("GETTING DATA", "QUESTION ARRAY", questionsObject.questionsArray);
+  console.log("GETTING DATA", "BODY", body);
+  console.log("GETTING DATA", "BODY USER", body["user"]);
+  console.log("GETTING DATA", "COUNT", count);
 
   for (let i = 0; i < wrong2.length; i++) {
     let incorrect = {
@@ -84,13 +106,14 @@ async function getResult(ack, body, view, questionsObject, client) {
   resultBlock.push(again);
 
   try {
-    if(questionsObject.user === user){
+    if (questionsObject.user === user) {
       await client.chat.postMessage({
         channel: user,
         text: "",
         blocks: resultBlock,
       });
     }
+    addResult(questionsObject.questionsArray, wrong2, body["user"]);
   } catch (error) {
     console.error(error);
   }
