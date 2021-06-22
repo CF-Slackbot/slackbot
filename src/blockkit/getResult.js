@@ -2,7 +2,7 @@
 
 const axios = require("axios");
 
-const api = "https://cf-slackbot-questions-api.herokuapp.com/results";
+const api = "https://cf-slackbot-questions-api.herokuapp.com/api/v2/result";
 
 let addResult = async (questions, incorrect, user) => {
   try {
