@@ -35,6 +35,8 @@ async function getResult(ack, body, view, questionsObject, client) {
       question: questionsObject.questionsArray[i]["question"],
       userAnswer: questionsObject.questionsArray[i].answers[userInput],
       correctAnswer: questionsObject.questionsArray[i].answers[correct],
+      category: questionsObject.questionsArray[i]["category"],
+      difficulty: questionsObject.questionsArray[i]["difficulty"]
     };
     userInput === correct ? (count += 1) : wrong2.push(internalAnswerObj);
   }
